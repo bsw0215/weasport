@@ -1,0 +1,28 @@
+package com.connect.weasport.controller.club;
+
+import com.connect.weasport.domain.Club;
+import com.connect.weasport.service.ClubService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class ClubContorller {
+
+    @Autowired
+    private ClubService clubService;
+
+
+    @GetMapping("/tables")
+    public String clubs() { return "tables"; }
+
+    @GetMapping("/create")
+    public String clubCreate(){
+        return "create";
+    }
+
+
+
+}
