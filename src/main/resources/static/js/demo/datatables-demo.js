@@ -9,7 +9,18 @@ $(document).ready(function () {
                 let table = $('#dataTable').DataTable({
                     data: data,
                     columns: [
-                            {data: "title"},
+                            {
+                                data: "title",
+
+                                render: function(data, type, row) {
+                                    if (type === 'display') {
+
+                                        let link = `<a href="/clubs/` + row.id +'">' + data + '</a>';
+                                        return link;
+                                    }
+                                    return data;
+                                }
+                            },
                             {data: "contents"},
                             {data: "minPerson"},
                             {data: "maxPerson"},
@@ -17,7 +28,6 @@ $(document).ready(function () {
                             {data: "endDate"},
                             {data: "sido"},
                             {data: "si"},
-                            {data: "address"}
 
                     ],
                     autoWidth : true,
@@ -57,6 +67,8 @@ $(document).ready(function () {
         });
 
 });
+
+
 
 
 

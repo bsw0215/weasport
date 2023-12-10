@@ -59,6 +59,12 @@ public class ClubService {
         return clubRepository.save(newClub);
     }
 
+    public Club clubDetail(long clubId){
+        return clubRepository.findById(clubId).orElseThrow(()->{
+            return new IllegalArgumentException("클럽을 찾을 수 없습니다.");
+        });
+    }
+
     private void changeClubStatus(Club club) {
         if (LocalDate.now().isAfter(club.getEndDate())) {
             club.changeStatus(ClubStatus.EXPIRED);

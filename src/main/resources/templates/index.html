@@ -232,7 +232,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 내 모임 승인 대기자 수</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${waiting}"></div>
                                         </div>
                                         <div class="col-auto">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -240,9 +240,12 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                                  aria-labelledby="dropdownMenuLink">
-                                                <div class="dropdown-header">승인 대기자:</div>
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <div class="dropdown-header">승인 대기 모임:</div>
+                                                <span th:each="title : ${waitList}">
+                                                    <a class="dropdown-item" href="#" th:text="${title}"></a>
+                                                </span>
+
+
                                             </div>
                                         </div>
 
@@ -325,7 +328,7 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body" th:each="club : ${clubs}">
-                                    <a href="detail" th:text="|${club.contents} (${club.startDate} ~ ${club.endDate})|"></a>
+                                    <a href="detail" th:text="|${club.title} (${club.startDate} ~ ${club.endDate})|"></a>
                                     <hr>
                                 </div>
                             </div>

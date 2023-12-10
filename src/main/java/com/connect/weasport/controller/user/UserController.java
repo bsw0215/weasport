@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,9 +33,9 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/")
-    public String home() { return "home"; }
+    public String home() { return "tables"; }
 
-
+//대시보드 페이지
     @GetMapping("/index/{userId}")
     public String index(@PathVariable int userId, Model model) {
         List<Club> clubs = clubService.findClubByUserId(userId);
@@ -50,8 +51,21 @@ public class UserController {
                 progress++;
             }
         }
+
+        List<Member> memberList = memberService.getMemberList(userId, "WAITING");
+
+        int waiting = memberList.size();
+
+        List<String> waitList = new ArrayList<>();
+
+        for(Member m : memberList){
+            waitList.add(m.getClub().getTitle());
+        }
+
+        model.addAttribute("waiting",waiting);
         model.addAttribute("progress",progress);
         model.addAttribute("scheduled",scheduled);
+        model.addAttribute("waitList", waitList);
 
         return "index";
     }
