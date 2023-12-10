@@ -22,14 +22,14 @@ public class MemberApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
     }
 
-    @PutMapping("api/club/{id}")
+    @PutMapping("api/member/{id}")
     public ResponseDto<Integer> approve(@PathVariable long id){
         System.out.println("id=" + id);
         memberService.approveMember(id);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
-    @DeleteMapping("api/club/{id}")
+    @DeleteMapping("api/member/{id}")
     public ResponseDto<Integer> memberDelete(@PathVariable long id){
         memberService.deleteMember(id);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);

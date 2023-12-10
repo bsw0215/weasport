@@ -64,10 +64,17 @@ public class ClubApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    @DeleteMapping("/api/club/{id}")
+    public ResponseDto<Integer> deleteClub(@PathVariable long id){
+        clubService.delete(id);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 
-
-
-
+    @PostMapping("api/reply")
+    public ResponseDto<Integer> replySave(@RequestBody ClubReplySaveDto clubReplySaveDto) {
+        clubService.replyWrite(clubReplySaveDto);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 
 
 }

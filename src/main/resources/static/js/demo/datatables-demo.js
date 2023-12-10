@@ -34,8 +34,6 @@ $(document).ready(function () {
                 });
                 table.columns([2,3,4,5,6,7]).every(function () {
                             let column = this;
-                            console.log(column.data().toArray());
-
                             // Create select element
                             let select = document.createElement('select');
                             select.add(new Option(''));

@@ -2,10 +2,8 @@ package com.connect.weasport.service;
 
 
 import com.connect.weasport.controller.club.ClubCreateDto;
-import com.connect.weasport.domain.Club;
-import com.connect.weasport.domain.ClubStatus;
-import com.connect.weasport.domain.Member;
-import com.connect.weasport.domain.User;
+import com.connect.weasport.controller.club.ClubReplySaveDto;
+import com.connect.weasport.domain.*;
 import com.connect.weasport.repository.ClubRepository;
 import com.connect.weasport.repository.MemberRepository;
 import com.connect.weasport.repository.ReplyRepository;
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,6 +98,54 @@ public class ClubService {
         }
 
         return clubs;
+    }
+
+    public List<Club> findClubByStatus(int userId, ApprovalStatus approvalStatus){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("모임 찾기 : 사용자 아이디를 찾을 수 없습니다.");
+                });
+
+        List<Member> memberList = memberRepository.findByUserAndApprovalStatus(user, approvalStatus);
+
+        List<Club> clubList = new ArrayList<>();
+
+        for(Member member:memberList){
+            clubList.add(member.getClub());
+        }
+        return clubList;
+    }
+
+    @Transactional
+    public void replyWrite(ClubReplySaveDto clubReplySaveDto) {
+        Reply reply = clubReplySaveDto.toEntity();
+        int userId = clubReplySaveDto.getUserId();
+        Long clubId = clubReplySaveDto.getClubId();
+
+        final Reply newReply = convertToReply(reply, userId, clubId);
+        replyRepository.save(newReply);
+    }
+
+    private Reply convertToReply(final Reply comment, final int userId, final Long clubId) {
+        final User user = userRepository.findById(userId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("댓글 작성 : 사용자 아이디를 찾을 수 없습니다.");
+                });
+        final Club club = clubRepository.findById(clubId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("댓글 작성 : 모임을 찾을 수 없습니다.");
+                });
+
+        return Reply.builder()
+                .contents(comment.getContents())
+                .club(club)
+                .user(user)
+                .build();
+    }
+
+    @Transactional
+    public void delete(long id){
+        clubRepository.deleteById(id);
     }
 
 

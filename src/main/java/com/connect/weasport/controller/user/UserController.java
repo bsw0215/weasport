@@ -1,5 +1,6 @@
 package com.connect.weasport.controller.user;
 
+import com.connect.weasport.domain.ApprovalStatus;
 import com.connect.weasport.domain.Club;
 import com.connect.weasport.domain.Member;
 import com.connect.weasport.domain.User;
@@ -52,20 +53,22 @@ public class UserController {
             }
         }
 
+
+
         List<Member> memberList = memberService.getMemberList(userId, "WAITING");
-
+        List<Club> waitList = new ArrayList<>();
         int waiting = memberList.size();
-
-        List<String> waitList = new ArrayList<>();
-
         for(Member m : memberList){
-            waitList.add(m.getClub().getTitle());
+            waitList.add(m.getClub());
         }
+
+        List<Club> waitClubs = clubService.findClubByStatus(userId, ApprovalStatus.WAITING);
 
         model.addAttribute("waiting",waiting);
         model.addAttribute("progress",progress);
         model.addAttribute("scheduled",scheduled);
         model.addAttribute("waitList", waitList);
+        model.addAttribute("waitClubs", waitClubs);
 
         return "index";
     }

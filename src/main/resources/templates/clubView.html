@@ -107,12 +107,12 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">로그인 관리:</h6>
-                        <a class="collapse-item" href="/login">로그인</a>
-                        <a class="collapse-item" href="/register">회원가입</a>
-                        <a class="collapse-item" href="/forgot-password">Forgot Password</a>
+                        <a class="collapse-item" href="/login" sec:authorize="!isAuthenticated()">로그인</a>
+                        <a class="collapse-item" href="/register" sec:authorize="!isAuthenticated()">회원가입</a>
+                        <a class="collapse-item" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
                         <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">내 정보 관리:</h6>
-                        <a class="collapse-item" href="/404">정보 수정</a>
+                        <h6 class="collapse-header" sec:authorize="isAuthenticated()">내 정보 관리:</h6>
+                        <a class="collapse-item" href="/404" sec:authorize="isAuthenticated()">정보 수정</a>
                     </div>
                 </div>
             </li>
@@ -151,35 +151,50 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="/img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                        <span sec:authorize="isAuthenticated()">
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${#authentication.principal.user.name}"></span>
+                                    <img class="img-profile rounded-circle"
+                                        src="/img/undraw_profile.svg">
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                    aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" th:href="@{/index/{id}(id=${#authentication.principal.user.id})}">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        대시보드
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </li>
+                        </span>
+                        <span sec:authorize="!isAuthenticated()">
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">게스트</span>
+                                    <i class="bi bi-person-circle"></i>
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="/login">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        로그인
+                                    </a>
+                                </div>
+                            </li>
+                        </span>
 
                     </ul>
 
@@ -193,8 +208,15 @@
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-2 text-gray-800" th:text="|${club.title} (${club.startDate} ~ ${club.endDate})|"></h1>
                         <span sec:authorize="isAuthenticated()">
-                            <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}"/>
-                            <a href="#" id="btn-save" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">모임 신청하기 </a>
+                            <span th:if="${#authentication.principal.user.id} == ${club.user.id}">
+                                <input type="hidden" id="ci" th:value="${club.id}"/>
+                                <a href="#" id="btn-update" class="d-none d-sm-inline-block btn btn-sm btn-Secondary shadow-sm">모임 수정하기 </a>
+                                <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-Danger shadow-sm">모임 삭제하기 </a>
+                            </span>
+                            <span th:if="${#authentication.principal.user.id} != ${club.user.id}">
+                                <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}"/>
+                                <a href="#" id="btn-save" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">모임 신청하기 </a>
+                            </span>
                         </span>
                         <span sec:authorize="!isAuthenticated()" onclick="alert('로그인을 해주세요')">
                             <a th:href="@{/login}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">모임 신청하기 </a>
@@ -207,9 +229,9 @@
                         </div>
                         <div class="card-body">
                             <p>
-                                모임 운영자: <span th:text="${club.user.name}"></span>
+                                모임 운영자 : <span th:text="${club.user.name}"></span>
                                 <hr>
-                                모임 한줄 소개: <span th:text="${club.contents}"></span>
+                                스포츠 : <span th:text="${club.contents}"></span>
                                 <hr>
                                 시작일 : <span th:text="${club.startDate}"></span>
                                 <hr>
@@ -228,9 +250,44 @@
 
                         </div>
                     </div>
-
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form class="mb-4">
+                                    <textarea id="reply-content" class="form-control" rows="3" placeholder="모임에 대해 궁금한 것을 질문하세요!"></textarea>
+                                    <span sec:authorize="isAuthenticated()">
+                                        <input type="hidden" th:id="userId" th:value="${#authentication.principal.user.id}" />
+                                        <button type="button" class="btn btn-dark mt-3" id="btn-reply-save">댓글 작성</button>
+                                    </span>
+                                    <span sec:authorize="!isAuthenticated()">
+                                            <button type="button" class="btn btn-dark mt-3" onclick="alert('로그인을 해주세요')">댓글 작성</button>
+                                    </span>
+                                </form>
+                                <!-- Comment with nested comments-->
+                                <span th:each="reply : ${club.replyList}">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0"><i class="bi bi-person-circle"></i></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold" th:text="${reply.user.name}"></div>
+                                            <span th:text="${reply.contents}"></span>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </span>
+<!--                                <div class="d-flex">-->
+<!--                                    <div class="flex-shrink-0"><i class="bi bi-person-circle"></i></div>-->
+<!--                                    <div class="ms-3">-->
+<!--                                        <div class="fw-bold">Commenter Name</div>-->
+<!--                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                    </section>
                     <!-- Page Heading -->
                     <div class="card shadow mb-4">
+
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-success">참여자 목록</h6>
                         </div>
@@ -256,7 +313,7 @@
 
                                                         <a th:if="${member.approvalStatus.name() == 'WAITING'}" href="#" type="button" class="btn btn-info" th:onclick="index.approve([[${member.id}]],[[${club.id}]]);">승인 대기중</a>
                                                         <button th:if="${member.approvalStatus.name() == 'CONFIRMED'}" type="button" class="btn btn-warning">승인 완료</button>
-                                                        <a th:if="${member.user.id} != ${#authentication.principal.user.id}" href="#" type="button" class="btn btn-info" th:onclick="index.deleteById([[${member.id}]],[[${club.id}]]);">내보내기</a>
+                                                        <a th:if="${member.user.id} != ${#authentication.principal.user.id}" href="#" type="button" class="btn btn-info" th:onclick="index.deleteMember([[${member.id}]],[[${club.id}]]);">내보내기</a>
                                                     </span>
                                                     <span th:if="${#authentication.principal.user.id} != ${club.user.id}">
                                                         <span th:if="${member.approvalStatus.name() == 'WAITING'}">승인 대기중</span>
@@ -288,7 +345,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Weasport Connect</span>
                     </div>
                 </div>
             </footer>
@@ -311,7 +368,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">로그아웃 하시나요?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -319,7 +376,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login">Logout</a>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
                 </div>
             </div>
         </div>

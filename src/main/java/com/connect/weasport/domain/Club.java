@@ -29,10 +29,11 @@ public class Club extends BaseTime{
     @ManyToOne(fetch = EAGER)
     private User user;
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties({"club"})
     private final List<Reply> replyList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties({"club"})
     private final List<Member> memberList = new ArrayList<>();
 
