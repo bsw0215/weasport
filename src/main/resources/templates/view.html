@@ -206,7 +206,7 @@
                         <span sec:authorize="isAuthenticated()">
                             <span th:if="${#authentication.principal.user.id} == ${board.user.id}">
 
-                                <a th:href="@{/boards/{id}/updateForm(id=${board.id})}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">글 수정하기 </a>
+                                <a th:href="@{/board/{id}/updateForm(id=${board.id})}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">글 수정하기 </a>
                                 <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">글 삭제하기 </a>
                             </span>
                         </span>
@@ -252,8 +252,9 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0"><i class="bi bi-person-circle"></i></div>
                                         <div class="ms-3">
-                                            <div class="fw-bold" th:text="${reply.user.name}"></div>
-                                            <span th:text="${reply.content}"></span>
+                                            <div class="fw-bold" style="display: inline-block;" th:text="${reply.user.name}"></div>
+                                            <div class="small" style="display: inline-block; margin-left: 5px;" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                                            <div th:text="${reply.content}"></div>
                                         </div>
                                         <span class="ms-auto" sec:authorize="isAuthenticated()">
                                                 <span th:if="${#authentication.principal.user.id} == ${reply.user.id}">

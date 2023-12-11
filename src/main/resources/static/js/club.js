@@ -22,6 +22,7 @@ let index = {
         					sido: $("#sido").val(),
         					si: $("#si").val(),
         					address: $("#address").val(),
+        					weather: $("#weather").val(),
         			};
 
         			 if(data.title == '') {

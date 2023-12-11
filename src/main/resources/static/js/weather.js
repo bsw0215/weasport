@@ -103,7 +103,7 @@ $.ajax({
             }
 
             let dateTime = data.result.response.body.items.item[0].baseTime;
-            let convertedTime = data.result.response.body.items.item[0].baseDate + ", " + convertTimeFormat(dateTime);
+            let convertedTime = "춘천시 " + data.result.response.body.items.item[0].baseDate + ", " + convertTimeFormat(dateTime);
             $("#date").text(convertedTime);
         } else {
            console.log("fail == >");

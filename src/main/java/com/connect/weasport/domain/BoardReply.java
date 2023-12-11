@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-public class BoardReply {
+public class BoardReply extends BaseTime{
     @Id //Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 프로젝트에서 연결된 DB의 넘버링 전략을 따라간다.
     private int id; // 시퀀스, auto_increment
@@ -30,12 +30,9 @@ public class BoardReply {
     @JoinColumn(name="userId")
     private User user;
 
-    @CreationTimestamp
-    private LocalDateTime createDate;
 
     @Override
     public String toString() {
-        return "Reply [id=" + id + ", content=" + content + ", board=" + board + ", user=" + user + ", createDate="
-                + createDate + "]";
+        return "Reply [id=" + id + ", content=" + content + ", board=" + board + ", user=" + user + "]";
     }
 }

@@ -47,8 +47,8 @@ public class WeatherApiController {
 
         LocalDateTime resultDateTime;
 
-        // 현재 시간이 00:00 ~ 06:00 사이인지 확인
-        if (currentTime.isAfter(LocalTime.MIDNIGHT) && currentTime.isBefore(LocalTime.of(5, 0))) {
+        // 현재 시간이 00:00 ~ 05:00 사이인지 확인
+        if (currentTime.isAfter(LocalTime.MIDNIGHT) && currentTime.isBefore(LocalTime.of(2, 0))) {
             // 현재 날짜에서 하루를 빼서 반환
             resultDateTime = currentDateTime.minusDays(1);
         } else {
@@ -56,11 +56,25 @@ public class WeatherApiController {
             resultDateTime = currentDateTime;
         }
 
-        if (currentTime.isAfter(LocalTime.of(5,0)) && currentTime.isBefore(LocalTime.of(17,0))){
+        if (currentTime.isAfter(LocalTime.of(2,0)) && currentTime.isBefore(LocalTime.of(5,0))){
+            resultDateTime = resultDateTime.withHour(2);
+        }else if(currentTime.isAfter(LocalTime.of(5,0)) && currentTime.isBefore(LocalTime.of(8,0))){
             resultDateTime = resultDateTime.withHour(5);
-        } else{
+        }else if(currentTime.isAfter(LocalTime.of(8,0)) && currentTime.isBefore(LocalTime.of(11,0))){
+            resultDateTime = resultDateTime.withHour(8);
+        }else if(currentTime.isAfter(LocalTime.of(11,0)) && currentTime.isBefore(LocalTime.of(14,0))){
+            resultDateTime = resultDateTime.withHour(11);
+        }else if(currentTime.isAfter(LocalTime.of(14,0)) && currentTime.isBefore(LocalTime.of(17,0))){
+            resultDateTime = resultDateTime.withHour(14);
+        }else if(currentTime.isAfter(LocalTime.of(17,0)) && currentTime.isBefore(LocalTime.of(20,0))){
             resultDateTime = resultDateTime.withHour(17);
+        }else if(currentTime.isAfter(LocalTime.of(20,0)) && currentTime.isBefore(LocalTime.of(23,0))){
+            resultDateTime = resultDateTime.withHour(20);
+        }else{
+            resultDateTime = resultDateTime.withHour(23);
         }
+
+
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formattedDate = resultDateTime.format(dateFormatter);
