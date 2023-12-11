@@ -22,7 +22,7 @@ $(document).ready(function () {
                                 }
                             },
                             {data: "contents"},
-                            {data: "minPerson"},
+                            {data: "weather"},
                             {data: "maxPerson"},
                             {data: "startDate"},
                             {data: "endDate"},

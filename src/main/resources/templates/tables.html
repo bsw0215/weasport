@@ -76,22 +76,12 @@
                     <span>모임찾기</span></a>
             </li>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="bi bi-chat-left-dots-fill"></i>
-                    <span>게시판</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">어떤 게시판?</h6>
-                        <a class="collapse-item" href="/buttons">자유 게시판</a>
-                        <a class="collapse-item" href="/cards">운동 게시판</a>
-                    </div>
-                </div>
-            </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="/board">
+                    <i class="bi bi-chat-left-dots-fill"></i>
+                    <span>게시판</span></a>
+            </li>
 
 
             <!-- Divider -->
@@ -154,7 +144,13 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#">
+                                <i id="wIcon"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="weather"></span>
+                            </a>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
                         <span sec:authorize="isAuthenticated()">
                             <li class="nav-item dropdown no-arrow">
@@ -236,7 +232,7 @@
                                         <tr>
                                             <th>모임 제목</th>
                                             <th>스포츠</th>
-                                            <th>최소 인원</th>
+                                            <th>날씨</th>
                                             <th>최대 인원</th>
                                             <th>모임 시작</th>
                                             <th>모임 끝</th>
@@ -248,7 +244,7 @@
                                     <tr>
                                         <th>모임 제목</th>
                                         <th>스포츠</th>
-                                        <th>최소 인원</th>
+                                        <th>날씨</th>
                                         <th>최대 인원</th>
                                         <th>모임 시작</th>
                                         <th>모임 끝</th>
@@ -324,6 +320,7 @@
 
     <!-- Page level custom scripts -->
     <script src="/js/demo/datatables-demo.js"></script>
+    <script src="/js/weather.js"></script>
 
 </body>
 

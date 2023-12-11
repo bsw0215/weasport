@@ -22,6 +22,7 @@ public class ClubCreateDto {
     private String sido;
     private String si;
     private String address;
+    private String weather;
 
     public Club toEntity() {
         return Club.builder()
@@ -33,6 +34,7 @@ public class ClubCreateDto {
                 .sido(sido)
                 .si(si)
                 .address(address)
+                .weather(weather)
                 .build();
     }
 }

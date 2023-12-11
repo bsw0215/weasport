@@ -72,12 +72,22 @@
                     <span>모임찾기</span></a>
             </li>
 
-
+            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="/board">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="bi bi-chat-left-dots-fill"></i>
-                    <span>게시판</span></a>
+                    <span>게시판</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">어떤 게시판?</h6>
+                        <a class="collapse-item" href="buttons">자유 게시판</a>
+                        <a class="collapse-item" href="cards">운동 게시판</a>
+                    </div>
+                </div>
             </li>
+
 
 
             <!-- Divider -->
@@ -207,24 +217,25 @@
                                     <div class="col-lg-7">
                                         <div class="p-5">
                                             <div class="text-center">
-                                                <h1 class="h4 text-gray-900 mb-4">모임 등록 페이지</h1>
+                                                <h1 class="h4 text-gray-900 mb-4">모임 수정</h1>
                                             </div>
+
                                             <form class="user">
 
                                                 <div class="form-group">
                                                     모임 제목
-                                                    <input type="text" class="form-control" id="title" placeholder="모임 제목을 입력하세요">
+                                                    <input type="text" class="form-control" id="title" th:value="${club.title}">
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                                         어떤 스포츠에 대한 모임인가요?<br>
-                                                        <input type="text" class="form-control" id="cont" placeholder="스포츠명">
+                                                        <input type="text" class="form-control" id="cont" th:value="${club.contents}">
                                                     </div>
                                                     <div class="col-sm-6">
                                                         어떤 날씨에 할 운동인가요?<br>
                                                         <label class="visually-hidden" for="weather">Preference</label>
-                                                        <select class="form-select" id="weather">
-                                                            <option value="상관없음" selected>상관없음</option>
+                                                        <select class="form-select" id="weather" th:value="${club.weather}">
+                                                            <option value="상관없음">상관없음</option>
                                                             <option value="맑은날">맑은날</option>
                                                             <option value="비오는 날">비오는 날</option>
                                                             <option value="눈오는 날">눈오는 날</option>
@@ -235,8 +246,7 @@
                                                 <div class="form-group row g-3">
                                                     <div class="col-auto">
                                                         <label class="visually-hidden" for="sido">Preference</label>
-                                                        <select class="form-select" id="sido">
-                                                            <option selected>시/도 선택</option>
+                                                        <select class="form-select" id="sido" th:value="${club.sido}">
                                                             <option value="서울/경기">서울/경기</option>
                                                             <option value="강원">강원</option>
                                                             <option value="충북">충북</option>
@@ -248,10 +258,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm">
-                                                        <input type="text" id="si" class="form-control" placeholder="시(ex:서울시, 춘천시)">
+                                                        <input type="text" id="si" class="form-control" th:value="${club.si}">
                                                     </div>
                                                     <div class="col-sm">
-                                                        <input type="text" id="address" class="form-control" placeholder="나머지 주소">
+                                                        <input type="text" id="address" class="form-control" th:value="${club.address}">
                                                     </div>
                                                 </div>
                                                 <div>인원을 설정하세요</div>
@@ -259,8 +269,7 @@
 
                                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                                         <label class="visually-hidden" for="minPerson">Preference</label>
-                                                        <select class="form-select" id="minPerson">
-                                                            <option selected>최소 인원</option>
+                                                        <select class="form-select" id="minPerson" th:value="${club.minPerson}">
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
                                                             <option value="4">4</option>
@@ -274,8 +283,7 @@
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <label class="visually-hidden" for="maxPerson">Preference</label>
-                                                        <select class="form-select" id="maxPerson">
-                                                            <option selected>최대 인원</option>
+                                                        <select class="form-select" id="maxPerson" th:value="${club.maxPerson}">
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
                                                             <option value="4">4</option>
@@ -295,7 +303,7 @@
                                                                    id="startDate"
                                                                    max="2028-06-20"
                                                                    min="2023-01-01"
-                                                                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
+                                                                   th:value="${club.startDate}">
                                                         </label>
                                                     </div>
                                                     <div class="col-sm-6">
@@ -304,18 +312,19 @@
                                                                    id="endDate"
                                                                    max="2028-06-20"
                                                                    min="2023-01-01"
-                                                                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
+                                                                   th:value="${club.endDate}">
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="mb-3">
                                                         <label for="description" class="form-label">모임의 자세한 설명</label>
-                                                        <textarea class="form-control" id="description" rows="3"></textarea>
+                                                        <textarea class="form-control" id="description" rows="3" th:text="${club.description}"></textarea>
                                                     </div>
                                                 </div>
-                                                <a href="#" id="btn-save" class="btn btn-primary btn-user btn-block">
-                                                    모임 등록
+                                                <input type="hidden" id="id" th:value="${club.id}" />
+                                                <a href="#" id="btn-update" class="btn btn-primary btn-user btn-block">
+                                                    모임 수정
                                                 </a>
                                                 <hr>
 

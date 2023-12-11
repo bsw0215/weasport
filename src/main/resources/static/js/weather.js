@@ -81,6 +81,27 @@ $.ajax({
             $("#reh").text(reh);
             $("#pcp").text(pcp);
 
+            var iconElement = document.getElementById("wIcon");
+
+            if(iconElement) {
+                if(ptyValue == "비"){
+                    iconElement.className = "bi bi-cloud-drizzle-fill";
+                    $("#weather").text(tmp+" "+ptyValue+" 내리는 중");
+                }else if(ptyValue == "맑음"){
+                    iconElement.className = "bi bi-brightness-high-fill";
+                    $("#weather").text(tmp+" "+ptyValue);
+                }else if(ptyValue == "눈/비"){
+                    iconElement.className = "bi bi-cloud-drizzle-fill";
+                    $("#weather").text(tmp+" "+ptyValue+" 내리는 중");
+                }else if(ptyValue == "눈"){
+                    iconElement.className = "bi bi-cloud-snow-fill";
+                    $("#weather").text(tmp+" "+ptyValue+" 내리는 중");
+                }else if(ptyValue == "소나기"){
+                    iconElement.className = "bi bi-cloud-drizzle-fill";
+                    $("#weather").text(tmp+" "+ptyValue+" 내리는 중");
+                }
+            }
+
             let dateTime = data.result.response.body.items.item[0].baseTime;
             let convertedTime = data.result.response.body.items.item[0].baseDate + ", " + convertTimeFormat(dateTime);
             $("#date").text(convertedTime);

@@ -149,7 +149,13 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#">
+                                <i id="wIcon"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="weather"></span>
+                            </a>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
                         <span sec:authorize="isAuthenticated()">
                             <li class="nav-item dropdown no-arrow">
@@ -210,8 +216,8 @@
                         <span sec:authorize="isAuthenticated()">
                             <span th:if="${#authentication.principal.user.id} == ${club.user.id}">
                                 <input type="hidden" id="ci" th:value="${club.id}"/>
-                                <a href="#" id="btn-update" class="d-none d-sm-inline-block btn btn-sm btn-Secondary shadow-sm">모임 수정하기 </a>
-                                <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-Danger shadow-sm">모임 삭제하기 </a>
+                                <a th:href="@{/clubs/{id}/edit(id=${club.id})}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">모임 수정하기 </a>
+                                <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">모임 삭제하기 </a>
                             </span>
                             <span th:if="${#authentication.principal.user.id} != ${club.user.id}">
                                 <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}"/>
@@ -232,6 +238,8 @@
                                 모임 운영자 : <span th:text="${club.user.name}"></span>
                                 <hr>
                                 스포츠 : <span th:text="${club.contents}"></span>
+                                <hr>
+                                날씨 : <span th:text="${club.weather}"></span>
                                 <hr>
                                 시작일 : <span th:text="${club.startDate}"></span>
                                 <hr>
@@ -272,16 +280,14 @@
                                             <div class="fw-bold" th:text="${reply.user.name}"></div>
                                             <span th:text="${reply.contents}"></span>
                                         </div>
+                                        <span class="ms-auto" sec:authorize="isAuthenticated()">
+                                                <span th:if="${#authentication.principal.user.id} == ${reply.user.id}">
+                                                        <button type="button" class="btn btn-danger" th:onclick="index.replyDelete([[${club.id}]],[[${reply.id}]]);">삭제</button>
+                                                </span>
+                                        </span>
                                     </div>
                                     <hr>
                                 </span>
-<!--                                <div class="d-flex">-->
-<!--                                    <div class="flex-shrink-0"><i class="bi bi-person-circle"></i></div>-->
-<!--                                    <div class="ms-3">-->
-<!--                                        <div class="fw-bold">Commenter Name</div>-->
-<!--                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.-->
-<!--                                    </div>-->
-<!--                                </div>-->
                             </div>
                         </div>
                     </section>
@@ -393,6 +399,7 @@
     <script src="/js/sb-admin-2.min.js"></script>
 
     <script src="/js/club-join.js"></script>
+    <script src="/js/weather.js"></script>
 
 </body>
 

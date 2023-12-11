@@ -93,6 +93,8 @@ public class UserController {
         user.setPassword(encPassword);
         user.setRole("ROLE_USER");
         userRepository.save(user);
-        return "redirect:/";
+        return "redirect:/login";
     }
+
+
 }

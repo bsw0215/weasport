@@ -33,7 +33,6 @@ public class ClubService {
     public Club createClub(ClubCreateDto requestDto){
         Club club = requestDto.toEntity();
         String startDateString = requestDto.getStartDate();
-        System.out.println("Service시작날짜:" + startDateString);
         String endDateString = requestDto.getEndDate();
         LocalDate startDate = LocalDate.parse(startDateString, DateTimeFormatter.ISO_DATE);
         LocalDate endDate = LocalDate.parse(endDateString, DateTimeFormatter.ISO_DATE);
@@ -53,6 +52,7 @@ public class ClubService {
                 .sido(club.getSido())
                 .si(club.getSi())
                 .address(club.getAddress())
+                .weather((club.getWeather()))
                 .clubStatus(ClubStatus.ACTIVE)
                 .build();
         return clubRepository.save(newClub);
@@ -144,14 +144,38 @@ public class ClubService {
     }
 
     @Transactional
+    public void replyDelete(long replyId){
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("댓글 삭제 실패: 아이디를 찾을 수 없습니다.");
+                });
+        replyRepository.delete(reply);
+    }
+
+    @Transactional
     public void delete(long id){
         clubRepository.deleteById(id);
     }
 
+    @Transactional
+    public void modify(long id, Club requestClub) {
+        Club club = clubRepository.findById(id)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("글 찾기 실패 : 아이디를 찾을 수 없습니다.");
+                });
+        changeClubStatus(club);
+        club.updateClub(requestClub.getDescription()
+                ,requestClub.getTitle()
+                ,requestClub.getContents()
+                ,requestClub.getStartDate()
+                ,requestClub.getEndDate()
+                ,requestClub.getMinPerson()
+                ,requestClub.getMaxPerson()
+                ,requestClub.getSido()
+                ,requestClub.getSi()
+                ,requestClub.getAddress()
+                ,requestClub.getWeather()
+        );
 
-
-
-
-
-
+    }
 }

@@ -31,6 +31,12 @@ public class ClubContorller {
         return "clubView";
     }
 
+    @GetMapping("/clubs/{clubId}/edit")
+    public String updateClub(@PathVariable long clubId, Model model){
+        model.addAttribute("club", clubService.clubDetail(clubId));
+        return "update-club";
+    }
+
 
 
 }

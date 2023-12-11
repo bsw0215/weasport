@@ -54,7 +54,6 @@
                 <a class="nav-link" th:href="@{/index/{id}(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>대시보드</span></a>
-
             </li>
 
             <!-- Divider -->
@@ -66,14 +65,14 @@
             </div>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/tables">
                     <i class="fas fa-fw fa-table"></i>
                     <span>모임찾기</span></a>
             </li>
 
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="/board">
                     <i class="bi bi-chat-left-dots-fill"></i>
                     <span>게시판</span></a>
@@ -134,13 +133,19 @@
 
             <!-- Main Content -->
             <div id="content">
-
+                <input type="hidden" id="boardId" th:value="${board.id}"/>
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#">
+                                <i id="wIcon"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="weather"></span>
+                            </a>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
                         <span sec:authorize="isAuthenticated()">
                             <li class="nav-item dropdown no-arrow">
@@ -192,141 +197,76 @@
                 </nav>
                 <!-- End of Topbar -->
 
+
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="container">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-2 text-gray-800" th:text="${board.title}"></h1>
+                        <span sec:authorize="isAuthenticated()">
+                            <span th:if="${#authentication.principal.user.id} == ${board.user.id}">
 
-                        <div class="card o-hidden border-0 shadow-lg my-5">
-                            <div class="card-body p-0">
-                                <!-- Nested Row within Card Body -->
-                                <div class="row">
-                                    <div class="col-lg-5 d-none d-lg-block">
-                                        <img src="/img/club.svg" width="100%" height="100%"></div>
-                                    <div class="col-lg-7">
-                                        <div class="p-5">
-                                            <div class="text-center">
-                                                <h1 class="h4 text-gray-900 mb-4">모임 등록 페이지</h1>
-                                            </div>
-                                            <form class="user">
+                                <a th:href="@{/boards/{id}/updateForm(id=${board.id})}" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">글 수정하기 </a>
+                                <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">글 삭제하기 </a>
+                            </span>
+                        </span>
+                    </div>
 
-                                                <div class="form-group">
-                                                    모임 제목
-                                                    <input type="text" class="form-control" id="title" placeholder="모임 제목을 입력하세요">
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        어떤 스포츠에 대한 모임인가요?<br>
-                                                        <input type="text" class="form-control" id="cont" placeholder="스포츠명">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        어떤 날씨에 할 운동인가요?<br>
-                                                        <label class="visually-hidden" for="weather">Preference</label>
-                                                        <select class="form-select" id="weather">
-                                                            <option value="상관없음" selected>상관없음</option>
-                                                            <option value="맑은날">맑은날</option>
-                                                            <option value="비오는 날">비오는 날</option>
-                                                            <option value="눈오는 날">눈오는 날</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div>주소</div>
-                                                <div class="form-group row g-3">
-                                                    <div class="col-auto">
-                                                        <label class="visually-hidden" for="sido">Preference</label>
-                                                        <select class="form-select" id="sido">
-                                                            <option selected>시/도 선택</option>
-                                                            <option value="서울/경기">서울/경기</option>
-                                                            <option value="강원">강원</option>
-                                                            <option value="충북">충북</option>
-                                                            <option value="충남">충남</option>
-                                                            <option value="전북">전북</option>
-                                                            <option value="전남">전남</option>
-                                                            <option value="경북">경북</option>
-                                                            <option value="경남">경남</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <input type="text" id="si" class="form-control" placeholder="시(ex:서울시, 춘천시)">
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <input type="text" id="address" class="form-control" placeholder="나머지 주소">
-                                                    </div>
-                                                </div>
-                                                <div>인원을 설정하세요</div>
-                                                <div class="form-group row">
+                    <div class="card shadow mb-4">
+                        <div class="card-header hstack py-3">
+                            <div class="m-0 font-weight-bold" th:text="${board.user.name}"></div>
+                            &nbsp;
+                            <div class="vr"></div>
+                            &nbsp;
+                            <div class="m-0 font-weight-bold" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                            &nbsp;
+                            <div class="vr"></div>
+                            &nbsp;조회수:
+                            <div class="m-0 font-weight-bold" th:text="${board.count}"></div>
+                        </div>
+                        <div class="card-body">
+                            <p th:utext="${board.content}">
 
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <label class="visually-hidden" for="minPerson">Preference</label>
-                                                        <select class="form-select" id="minPerson">
-                                                            <option selected>최소 인원</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10인 이상</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label class="visually-hidden" for="maxPerson">Preference</label>
-                                                        <select class="form-select" id="maxPerson">
-                                                            <option selected>최대 인원</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10인 이상</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <label for="startDate">모임 시작일:
-                                                            <input type="date"
-                                                                   id="startDate"
-                                                                   max="2028-06-20"
-                                                                   min="2023-01-01"
-                                                                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label for="endDate">모임 끝나는날:
-                                                            <input type="date"
-                                                                   id="endDate"
-                                                                   max="2028-06-20"
-                                                                   min="2023-01-01"
-                                                                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="mb-3">
-                                                        <label for="description" class="form-label">모임의 자세한 설명</label>
-                                                        <textarea class="form-control" id="description" rows="3"></textarea>
-                                                    </div>
-                                                </div>
-                                                <a href="#" id="btn-save" class="btn btn-primary btn-user btn-block">
-                                                    모임 등록
-                                                </a>
-                                                <hr>
 
-                                            </form>
+                            </p>
+
+
+                        </div>
+                    </div>
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form class="mb-4">
+                                    <textarea id="reply-content" class="form-control" rows="3" placeholder="댓글을 작성해 보세요"></textarea>
+                                    <span sec:authorize="isAuthenticated()">
+                                        <input type="hidden" th:id="userId" th:value="${#authentication.principal.user.id}" />
+                                        <button type="button" class="btn btn-dark mt-3" id="btn-reply-save">댓글 작성</button>
+                                    </span>
+                                    <span sec:authorize="!isAuthenticated()">
+                                            <button type="button" class="btn btn-dark mt-3" onclick="alert('로그인을 해주세요')">댓글 작성</button>
+                                    </span>
+                                </form>
+                                <!-- Comment with nested comments-->
+                                <span th:each="reply : ${board.boardReplies}">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0"><i class="bi bi-person-circle"></i></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold" th:text="${reply.user.name}"></div>
+                                            <span th:text="${reply.content}"></span>
                                         </div>
+                                        <span class="ms-auto" sec:authorize="isAuthenticated()">
+                                                <span th:if="${#authentication.principal.user.id} == ${reply.user.id}">
+                                                        <button type="button" class="btn btn-danger" th:onclick="index.replyDelete([[${board.id}]],[[${reply.id}]]);">삭제</button>
+                                                </span>
+                                        </span>
                                     </div>
-                                </div>
+                                    <hr>
+                                </span>
                             </div>
                         </div>
+                    </section>
 
-                    </div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -385,7 +325,9 @@
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
 
-    <script src="/js/club.js"></script>
+    <script src="/js/board.js"></script>
+    <script src="/js/weather.js"></script>
+
 </body>
 
 </html>

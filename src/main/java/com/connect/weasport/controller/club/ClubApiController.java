@@ -64,6 +64,12 @@ public class ClubApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    @PutMapping("/api/club/{id}")
+    public ResponseDto<Integer> updateClub(@PathVariable long id, @RequestBody Club club){
+        clubService.modify(id, club);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
     @DeleteMapping("/api/club/{id}")
     public ResponseDto<Integer> deleteClub(@PathVariable long id){
         clubService.delete(id);
@@ -73,6 +79,12 @@ public class ClubApiController {
     @PostMapping("api/reply")
     public ResponseDto<Integer> replySave(@RequestBody ClubReplySaveDto clubReplySaveDto) {
         clubService.replyWrite(clubReplySaveDto);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("api/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable long replyId){
+        clubService.replyDelete(replyId);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 

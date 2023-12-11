@@ -31,6 +31,7 @@ public class Club extends BaseTime{
 
     @OneToMany(mappedBy = "club", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties({"club"})
+    @OrderBy("id desc")
     private final List<Reply> replyList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
@@ -64,6 +65,8 @@ public class Club extends BaseTime{
 
     private String address;
 
+    private String weather;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ClubStatus clubStatus; // [ACTIVE, EXPIRE]
@@ -71,7 +74,7 @@ public class Club extends BaseTime{
     @Builder
     public Club(Long id, User user, String description, String title, String contents,
                 LocalDate startDate, LocalDate endDate, int minPerson,
-                int maxPerson, String sido, String si, String address, ClubStatus clubStatus) {
+                int maxPerson, String sido, String si, String address, String weather, ClubStatus clubStatus) {
         this.id = id;
         this.user = user;
         this.description = description;
@@ -84,12 +87,13 @@ public class Club extends BaseTime{
         this.sido = sido;
         this.si = si;
         this.address = address;
+        this.weather = weather;
         this.clubStatus = clubStatus;
     }
 
     public void updateClub(String description, String title, String contents,
                 LocalDate startDate, LocalDate endDate, int minPerson,
-                int maxPerson, String sido, String si, String address, ClubStatus clubStatus) {
+                int maxPerson, String sido, String si, String address, String weather) {
         this.description = description;
         this.title = title;
         this.contents = contents;
@@ -100,7 +104,7 @@ public class Club extends BaseTime{
         this.si = si;
         this.sido = sido;
         this.address = address;
-        this.clubStatus = clubStatus;
+        this.weather = weather;
     }
 
     public void changeStatus(ClubStatus clubstatus) {

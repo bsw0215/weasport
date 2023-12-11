@@ -48,7 +48,7 @@ public class WeatherApiController {
         LocalDateTime resultDateTime;
 
         // 현재 시간이 00:00 ~ 06:00 사이인지 확인
-        if (currentTime.isAfter(LocalTime.MIDNIGHT) && currentTime.isBefore(LocalTime.of(6, 0))) {
+        if (currentTime.isAfter(LocalTime.MIDNIGHT) && currentTime.isBefore(LocalTime.of(5, 0))) {
             // 현재 날짜에서 하루를 빼서 반환
             resultDateTime = currentDateTime.minusDays(1);
         } else {
@@ -77,9 +77,8 @@ public class WeatherApiController {
                 + "&pageNo=1"                 // 페이지 번호
                 + "&base_date=" +  formattedDate   // 발표일자
                 + "&base_time=" + formattedHour + "00"    // 발표시각
-                + "&nx=55"                    // 예보지점 X 좌표
-                + "&ny=127";                  // 예보지점 Y 좌표
-        System.out.println("url = " + url);
+                + "&nx=73"                    // 예보지점 X 좌표
+                + "&ny=134";                  // 예보지점 Y 좌표
 
         HashMap<String, Object> resultMap = getDataFromJson(url, "UTF-8", "get", "");
 

@@ -3,15 +3,13 @@ let index = {
             $("#btn-save").on("click", ()=>{
                 this.save();
             });
-            $("#btn-reply-save").on("click", ()=>{
-                this.replySave();
-            });
             $("#btn-delete").on("click", ()=>{
                 this.deleteById();
             });
-            $("#btn-update").on("click", ()=>{
-                this.update();
+            $("#btn-reply-save").on("click", ()=>{
+                this.replySave();
             });
+
         },
 
 		save: function(){
@@ -35,19 +33,7 @@ let index = {
 			});
 		},
 
-		deleteById: function(){
-			let id = $("#ci").val();
-			$.ajax({
-				type: "DELETE",
-				url: "/api/club/"+id,
-				dataType: "json"
-			}).done(function(resp){
-				alert("삭제가 완료되었습니다.");
-				location.href = "/";
-			}).fail(function(error){
-				alert(JSON.stringify(error));
-			});
-		},
+
 
         approve: function(id, clubId){
 
@@ -76,6 +62,20 @@ let index = {
             });
         },
 
+        deleteById: function(){
+            let id = $("#ci").val();
+            $.ajax({
+                type: "DELETE",
+                url: "/api/club/"+id,
+                dataType: "json"
+            }).done(function(resp){
+                alert("모임 삭제가 완료되었습니다.");
+                location.href = "/";
+            }).fail(function(error){
+                alert(JSON.stringify(error));
+            });
+        },
+
 		replySave: function(){
 			let data = {
 					userId: $("#userId").val(),
@@ -96,6 +96,20 @@ let index = {
 				alert(JSON.stringify(error));
 			});
 		},
+
+        replyDelete : function(clubId, replyId){
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/reply/${replyId}`,
+                dataType: "json"
+            }).done(function(resp){
+                alert("댓글삭제 성공");
+                location.href = `/clubs/${clubId}`;
+            }).fail(function(error){
+                alert(JSON.stringify(error));
+            });
+        },
 }
 
 index.init();
