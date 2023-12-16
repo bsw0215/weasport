@@ -102,7 +102,7 @@
                         <a class="collapse-item" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header" sec:authorize="isAuthenticated()">내 정보 관리:</h6>
-                        <a class="collapse-item" href="/404" sec:authorize="isAuthenticated()">정보 수정</a>
+                        <a class="collapse-item" th:href="@{/user/{id}/updateInfo(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">정보 수정</a>
                     </div>
                 </div>
             </li>
@@ -210,7 +210,7 @@
                                 <a href="#" id="btn-delete" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm">모임 삭제하기 </a>
                             </span>
                             <span th:if="${#authentication.principal.user.id} != ${club.user.id}">
-                                <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}"/>
+<!--                                <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}"/>-->
                                 <a href="#" id="btn-save" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">모임 신청하기 </a>
                             </span>
                         </span>
@@ -281,6 +281,7 @@
                                     <hr>
                                 </span>
                             </div>
+                        </div>
                         </div>
                     </section>
                     <!-- Page Heading -->
@@ -391,7 +392,9 @@
     <script src="/js/sb-admin-2.min.js"></script>
 
     <script src="/js/club-join.js"></script>
-    <script src="/js/weather.js"></script>
+    <input type = "hidden" th:value="${#authentication.principal.user.id}" id="userId" sec:authorize="isAuthenticated()"/>
+    <script src="/js/weather.js" sec:authorize="isAuthenticated()"></script>
+    <script src="/js/weather2.js" sec:authorize="!isAuthenticated()"></script>
 
 </body>
 

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClubRepository extends JpaRepository<Club, Long> {
-    Optional<Club> findByUser(User user);
+
 
     List<Club> findAllByUser(User user);
 

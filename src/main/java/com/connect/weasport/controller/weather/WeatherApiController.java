@@ -12,9 +12,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
+import com.connect.weasport.service.UserService;
 import net.minidev.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +34,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/api")
 public class WeatherApiController {
 
-    @GetMapping("/weather")
-    public String restApiGetWeather() throws Exception {
+    @Autowired
+    UserService userService;
+
+    @GetMapping("/weather/{id}")
+    public String restApiGetIdWeather(@PathVariable int id) throws Exception {
         /*
             @ API LIST ~
 
@@ -41,6 +47,112 @@ public class WeatherApiController {
             getVilageFcst 동네예보조회
             getFcstVersion 예보버전조회
         */
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalTime currentTime = currentDateTime.toLocalTime();
+
+        LocalDateTime resultDateTime;
+
+        // 현재 시간이 00:00 ~ 05:00 사이인지 확인
+        if (currentTime.isAfter(LocalTime.MIDNIGHT) && currentTime.isBefore(LocalTime.of(2, 0))) {
+            // 현재 날짜에서 하루를 빼서 반환
+            resultDateTime = currentDateTime.minusDays(1);
+        } else {
+            // 현재 날짜를 반환
+            resultDateTime = currentDateTime;
+        }
+
+        if (currentTime.isAfter(LocalTime.of(2,0)) && currentTime.isBefore(LocalTime.of(5,0))){
+            resultDateTime = resultDateTime.withHour(2);
+        }else if(currentTime.isAfter(LocalTime.of(5,0)) && currentTime.isBefore(LocalTime.of(8,0))){
+            resultDateTime = resultDateTime.withHour(5);
+        }else if(currentTime.isAfter(LocalTime.of(8,0)) && currentTime.isBefore(LocalTime.of(11,0))){
+            resultDateTime = resultDateTime.withHour(8);
+        }else if(currentTime.isAfter(LocalTime.of(11,0)) && currentTime.isBefore(LocalTime.of(14,0))){
+            resultDateTime = resultDateTime.withHour(11);
+        }else if(currentTime.isAfter(LocalTime.of(14,0)) && currentTime.isBefore(LocalTime.of(17,0))){
+            resultDateTime = resultDateTime.withHour(14);
+        }else if(currentTime.isAfter(LocalTime.of(17,0)) && currentTime.isBefore(LocalTime.of(20,0))){
+            resultDateTime = resultDateTime.withHour(17);
+        }else if(currentTime.isAfter(LocalTime.of(20,0)) && currentTime.isBefore(LocalTime.of(23,0))){
+            resultDateTime = resultDateTime.withHour(20);
+        }else{
+            resultDateTime = resultDateTime.withHour(23);
+        }
+
+
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = resultDateTime.format(dateFormatter);
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH");
+        String formattedHour = resultDateTime.format(timeFormatter);
+
+
+        String address = userService.userDetail(id).getAddress();
+
+        int nx;
+        int ny;
+
+        switch (address){
+            case "서울/경기":
+                nx = 62;
+                ny = 125;
+                break;
+            case "충북":
+                nx = 76;
+                ny = 114;
+                break;
+            case "충남":
+                nx = 62;
+                ny = 95;
+                break;
+            case "전북":
+                nx = 56;
+                ny = 92;
+                break;
+            case "전남":
+                nx = 74;
+                ny = 65;
+                break;
+            case "경북":
+                nx = 84;
+                ny = 96;
+                break;
+            case "경남":
+                nx = 80;
+                ny = 75;
+                break;
+            default:
+                nx = 73;
+                ny = 134;
+
+        }
+
+
+        String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
+                + "?serviceKey=p4Acpy9Xh0uvTLPmXs8ett15aNovPnOJmqwfqfkpG%2BDmQW8CWFT6gAw6MfpY49EDCLete0OECrLVNLqlFP4Qxg%3D%3D"
+                + "&dataType=JSON"            // JSON, XML
+                + "&numOfRows=11"             // 페이지 ROWS
+                + "&pageNo=1"                 // 페이지 번호
+                + "&base_date=" +  formattedDate   // 발표일자
+                + "&base_time=" + formattedHour + "00"    // 발표시각
+                + "&nx=" + nx                   // 예보지점 X 좌표
+                + "&ny=" + ny;                  // 예보지점 Y 좌표
+
+        HashMap<String, Object> resultMap = getDataFromJson(url, "UTF-8", "get", "");
+
+        System.out.println("# RESULT : " + resultMap);
+
+        JSONObject jsonObj = new JSONObject();
+
+        jsonObj.put("result", resultMap);
+
+        return jsonObj.toString();
+    }
+
+    @GetMapping("/weather")
+    public String restApiGetWeather() throws Exception {
 
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalTime currentTime = currentDateTime.toLocalTime();

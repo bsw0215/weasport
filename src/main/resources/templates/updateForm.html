@@ -70,14 +70,14 @@
             </div>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/tables">
                     <i class="fas fa-fw fa-table"></i>
                     <span>모임찾기</span></a>
             </li>
 
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="/board">
                     <i class="bi bi-chat-left-dots-fill"></i>
                     <span>게시판</span></a>
@@ -107,7 +107,7 @@
                         <a class="collapse-item" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header" sec:authorize="isAuthenticated()">내 정보 관리:</h6>
-                        <a class="collapse-item" href="/404" sec:authorize="isAuthenticated()">정보 수정</a>
+                        <a class="collapse-item" th:href="@{/user/{id}/updateInfo(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">정보 수정</a>
                     </div>
                 </div>
             </li>
@@ -312,8 +312,8 @@
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="/js/weather.js"></script>
+    <input type = "hidden" th:value="${#authentication.principal.user.id}" id="userId" sec:authorize="isAuthenticated()"/>
+    <script src="/js/weather.js" sec:authorize="isAuthenticated()"></script>
     <script src="/js/board.js"></script>
 
 </body>

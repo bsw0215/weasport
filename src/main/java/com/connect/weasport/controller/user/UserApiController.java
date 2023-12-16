@@ -1,10 +1,12 @@
 package com.connect.weasport.controller.user;
 
+import com.connect.weasport.controller.ResponseDto;
+import com.connect.weasport.domain.Board;
+import com.connect.weasport.domain.User;
 import com.connect.weasport.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -25,5 +27,10 @@ public class UserApiController {
 
     }
 
+    @PutMapping("/api/user/{id}")
+    public ResponseDto<Integer> update(@PathVariable int id, @RequestBody User user){
+        userService.modify(id, user);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 }
 

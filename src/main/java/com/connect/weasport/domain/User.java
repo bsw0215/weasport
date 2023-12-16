@@ -23,6 +23,8 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    private String address;
+
     @Column(nullable = false)
     private String email;
 
@@ -35,4 +37,11 @@ public class User {
     private String providerId;
     @CreationTimestamp
     private Timestamp createDate;
+
+    public void updateUser(String name, String email, String address){
+        this.name = name;
+        this.email = email;
+        this.address = address;
+    }
 }
+

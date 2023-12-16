@@ -107,7 +107,7 @@
                         <a class="collapse-item" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header" sec:authorize="isAuthenticated()">내 정보 관리:</h6>
-                        <a class="collapse-item" href="/404" sec:authorize="isAuthenticated()">정보 수정</a>
+                        <a class="collapse-item" th:href="@{/user/{id}/updateInfo(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">정보 수정</a>
                     </div>
                 </div>
             </li>
@@ -320,8 +320,9 @@
 
     <!-- Page level custom scripts -->
     <script src="/js/demo/datatables-demo.js"></script>
-    <script src="/js/weather.js"></script>
-
+    <input type = "hidden" th:value="${#authentication.principal.user.id}" id="userId" sec:authorize="isAuthenticated()"/>
+    <script src="/js/weather.js" sec:authorize="isAuthenticated()"></script>
+    <script src="/js/weather2.js" sec:authorize="!isAuthenticated()"></script>
 </body>
 
 </html>

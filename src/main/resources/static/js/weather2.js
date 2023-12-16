@@ -19,9 +19,9 @@ function convertTimeFormat(inputTime) {
     return period + " " + hours + "시 " + (minutes !== 0 ? minutes + "분" : "");
 }
 
-let id = $("#userId").val();
+
 $.ajax({
-    url : "/api/weather/"+id,
+    url : "/api/weather",
     type : "get",
     contentType: "application/json",
     dataType : "json",
@@ -103,7 +103,7 @@ $.ajax({
             }
 
             let dateTime = data.result.response.body.items.item[0].baseTime;
-            let convertedTime = data.result.response.body.items.item[0].baseDate + ", " + convertTimeFormat(dateTime);
+            let convertedTime = "춘천시 " + data.result.response.body.items.item[0].baseDate + ", " + convertTimeFormat(dateTime);
             $("#date").text(convertedTime);
         } else {
            console.log("fail == >");

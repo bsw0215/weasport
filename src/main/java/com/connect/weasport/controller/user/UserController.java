@@ -7,6 +7,7 @@ import com.connect.weasport.domain.User;
 import com.connect.weasport.repository.UserRepository;
 import com.connect.weasport.service.ClubService;
 import com.connect.weasport.service.MemberService;
+import com.connect.weasport.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String home() { return "tables"; }
@@ -70,6 +74,10 @@ public class UserController {
         model.addAttribute("waitList", waitList);
         model.addAttribute("waitClubs", waitClubs);
 
+        String address = userService.userDetail(userId).getAddress();
+
+        model.addAttribute("address", address);
+
         return "index";
     }
 
@@ -94,6 +102,12 @@ public class UserController {
         user.setRole("ROLE_USER");
         userRepository.save(user);
         return "redirect:/login";
+    }
+
+    @GetMapping("/user/{id}/updateInfo")
+    public String update(@PathVariable int id, Model model) {
+        model.addAttribute("user", userService.userDetail(id));
+        return "updateInfo";
     }
 
 

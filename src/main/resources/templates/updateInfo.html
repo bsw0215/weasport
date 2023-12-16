@@ -50,7 +50,6 @@
                 <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>대시보드</span></a>
-
                 <a class="nav-link" th:href="@{/index/{id}(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>대시보드</span></a>
@@ -66,7 +65,7 @@
             </div>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/tables">
                     <i class="fas fa-fw fa-table"></i>
                     <span>모임찾기</span></a>
@@ -90,7 +89,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -214,114 +213,38 @@
                                     <div class="col-lg-7">
                                         <div class="p-5">
                                             <div class="text-center">
-                                                <h1 class="h4 text-gray-900 mb-4">모임 수정</h1>
+                                                <h1 class="h4 text-gray-900 mb-4">내 정보 수정</h1>
                                             </div>
 
                                             <form class="user">
 
                                                 <div class="form-group">
-                                                    모임 제목
-                                                    <input type="text" class="form-control" id="title" th:value="${club.title}">
+                                                    닉네임 수정
+                                                    <input type="text" class="form-control" id="name" th:value="${user.name}">
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        어떤 스포츠에 대한 모임인가요?<br>
-                                                        <input type="text" class="form-control" id="cont" th:value="${club.contents}">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        어떤 날씨에 할 운동인가요?<br>
-                                                        <label class="visually-hidden" for="weather">Preference</label>
-                                                        <select class="form-select" id="weather" th:value="${club.weather}">
-                                                            <option value="상관없음">상관없음</option>
-                                                            <option value="맑은날">맑은날</option>
-                                                            <option value="비오는 날">비오는 날</option>
-                                                            <option value="눈오는 날">눈오는 날</option>
-                                                        </select>
-                                                    </div>
+
+                                                <div class="form-group">
+                                                    이메일 수정
+                                                    <input type="email" class="form-control" id="email" th:value="${user.email}">
                                                 </div>
                                                 <div>주소</div>
-                                                <div class="form-group row g-3">
-                                                    <div class="col-auto">
-                                                        <label class="visually-hidden" for="sido">Preference</label>
-                                                        <select class="form-select" id="sido" th:value="${club.sido}">
-                                                            <option value="서울/경기">서울/경기</option>
-                                                            <option value="강원">강원</option>
-                                                            <option value="충북">충북</option>
-                                                            <option value="충남">충남</option>
-                                                            <option value="전북">전북</option>
-                                                            <option value="전남">전남</option>
-                                                            <option value="경북">경북</option>
-                                                            <option value="경남">경남</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <input type="text" id="si" class="form-control" th:value="${club.si}">
-                                                    </div>
-                                                    <div class="col-sm">
-                                                        <input type="text" id="address" class="form-control" th:value="${club.address}">
-                                                    </div>
-                                                </div>
-                                                <div>인원을 설정하세요</div>
-                                                <div class="form-group row">
-
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <label class="visually-hidden" for="minPerson">Preference</label>
-                                                        <select class="form-select" id="minPerson" th:value="${club.minPerson}">
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10인 이상</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label class="visually-hidden" for="maxPerson">Preference</label>
-                                                        <select class="form-select" id="maxPerson" th:value="${club.maxPerson}">
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10인 이상</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <label for="startDate">모임 시작일:
-                                                            <input type="date"
-                                                                   id="startDate"
-                                                                   max="2028-06-20"
-                                                                   min="2023-01-01"
-                                                                   th:value="${club.startDate}">
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label for="endDate">모임 끝나는날:
-                                                            <input type="date"
-                                                                   id="endDate"
-                                                                   max="2028-06-20"
-                                                                   min="2023-01-01"
-                                                                   th:value="${club.endDate}">
-                                                        </label>
-                                                    </div>
-                                                </div>
                                                 <div class="form-group">
-                                                    <div class="mb-3">
-                                                        <label for="description" class="form-label">모임의 자세한 설명</label>
-                                                        <textarea class="form-control" id="description" rows="3" th:text="${club.description}"></textarea>
-                                                    </div>
+                                                    <label class="visually-hidden" for="address">지역 선택</label>
+                                                    <select class="form-select" id="address">
+                                                        <option value="서울/경기" th:selected="${user.address == '서울/경기'}">서울/경기</option>
+                                                        <option value="강원" th:selected="${user.address == '강원'}">강원</option>
+                                                        <option value="충북" th:selected="${user.address == '충북'}">충북</option>
+                                                        <option value="충남" th:selected="${user.address == '충남'}">충남</option>
+                                                        <option value="전북" th:selected="${user.address == '전북'}">전북</option>
+                                                        <option value="전남" th:selected="${user.address == '전남'}">전남</option>
+                                                        <option value="경북" th:selected="${user.address == '경북'}">경북</option>
+                                                        <option value="경남" th:selected="${user.address == '경남'}">경남</option>
+                                                    </select>
                                                 </div>
-                                                <input type="hidden" id="id" th:value="${club.id}" />
+
+                                                <input type="hidden" id="id" th:value="${user.id}" />
                                                 <a href="#" id="btn-update" class="btn btn-primary btn-user btn-block">
-                                                    모임 수정
+                                                    내 정보 수정
                                                 </a>
                                                 <hr>
 
@@ -391,9 +314,10 @@
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
 
-    <script src="/js/club.js"></script>
+
     <input type = "hidden" th:value="${#authentication.principal.user.id}" id="userId" sec:authorize="isAuthenticated()"/>
     <script src="/js/weather.js" sec:authorize="isAuthenticated()"></script>
+    <script src="/js/user.js"></script>
 </body>
 
 </html>

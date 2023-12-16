@@ -108,7 +108,7 @@
                         <a class="collapse-item" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header" sec:authorize="isAuthenticated()">내 정보 관리:</h6>
-                        <a class="collapse-item" href="/404" sec:authorize="isAuthenticated()">정보 수정</a>
+                        <a class="collapse-item" th:href="@{/user/{id}/updateInfo(id=${#authentication.principal.user.id})}" sec:authorize="isAuthenticated()">정보 수정</a>
                     </div>
                 </div>
             </li>
@@ -344,7 +344,8 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                              aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="#" id="date"></a>
+                                            <div class="dropdown-item" th:text="${address}"> </div>
+                                            <div class="dropdown-item" id="date"></div>
 
                                         </div>
                                     </div>

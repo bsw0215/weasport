@@ -9,11 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
-    void deleteAllByClub(Club club);
-
-    Page<Reply> findAllByClubId(Long id, Pageable pageable);
-
-    Page<Reply> findAllByUser(User user, Pageable pageable);
 
 
 }
